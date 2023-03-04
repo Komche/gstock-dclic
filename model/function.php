@@ -4,7 +4,8 @@ include 'connexion.php';
 function getArticle($id = null)
 {
     if (!empty($id)) {
-        $sql = "SELECT * FROM article WHERE id=?";
+        $sql = "SELECT a.id AS id, id_categorie, nom_article, libelle_categorie, quantite, prix_unitaire, date_fabrication, date_expiration 
+        FROM article AS a, categorie_article AS c WHERE a.id=? AND c.id=a.id_categorie";
 
         $req = $GLOBALS['connexion']->prepare($sql);
 
@@ -12,7 +13,8 @@ function getArticle($id = null)
 
         return $req->fetch();
     } else {
-        $sql = "SELECT * FROM article";
+        $sql = "SELECT a.id AS id, id_categorie, nom_article, libelle_categorie, quantite, prix_unitaire, date_fabrication, date_expiration 
+        FROM article AS a, categorie_article AS c WHERE c.id=a.id_categorie";
 
         $req = $GLOBALS['connexion']->prepare($sql);
 
