@@ -63,6 +63,12 @@ include_once '../model/function.php';
                 </a>
             </li>
             <li>
+                <a href="categorie.php"  class="<?php echo basename($_SERVER['PHP_SELF'])=="categorie.php" ? "active" : "" ?> ">
+                    <i class="bx bx-list-ul"></i>
+                    <span class="links_name">Catégorie</span>
+                </a>
+            </li>
+            <li>
                 <a href="#">
                     <i class="bx bx-pie-chart-alt-2"></i>
                     <span class="links_name">Analyses</span>
