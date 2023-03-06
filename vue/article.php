@@ -9,13 +9,13 @@ if (!empty($_GET['id'])) {
 <div class="home-content">
     <div class="overview-boxes">
         <div class="box">
-            <form action=" <?= !empty($_GET['id']) ?  "../model/modifArticle.php" : "../model/ajoutArticle.php" ?>" method="post">
+            <form action=" <?= !empty($_GET['id']) ?  "../model/modifArticle.php" : "../model/ajoutArticle.php" ?>" method="post" enctype="multipart/form-data">
                 <label for="nom_article">Nom de l'article</label>
                 <input value="<?= !empty($_GET['id']) ?  $article['nom_article'] : "" ?>" type="text" name="nom_article" id="nom_article" placeholder="Veuillez saisir le nom">
                 <input value="<?= !empty($_GET['id']) ?  $article['id'] : "" ?>" type="hidden" name="id" id="id">
 
-                <label for="categorie">Catégorie</label>
-                <select name="categorie" id="categorie">
+                <label for="id_categorie">Catégorie</label>
+                <select name="id_categorie" id="id_categorie">
                 <option value="">--Choisir une catégorie--</option>
                     <?php
 
@@ -41,6 +41,9 @@ if (!empty($_GET['id'])) {
 
                 <label for="date_expiration">Date d'expiration</label>
                 <input value="<?= !empty($_GET['id']) ?  $article['date_expiration'] : "" ?>" type="datetime-local" name="date_expiration" id="date_expiration">
+                
+                <label for="images">Image</label>
+                <input value="<?= !empty($_GET['id']) ?  $article['images'] : "" ?>" type="file" name="images" id="images">
 
                 <button type="submit">Valider</button>
 
@@ -65,6 +68,7 @@ if (!empty($_GET['id'])) {
                     <th>Prix unitaire</th>
                     <th>Date fabrication</th>
                     <th>Date expiration</th>
+                    <th>Image</th>
                     <th>Action</th>
                 </tr>
                 <?php
@@ -80,6 +84,7 @@ if (!empty($_GET['id'])) {
                             <td><?= $value['prix_unitaire'] ?></td>
                             <td><?= date('d/m/Y H:i:s', strtotime($value['date_fabrication'])) ?></td>
                             <td><?= date('d/m/Y H:i:s', strtotime($value['date_expiration'])) ?></td>
+                            <td><img width="100" height="100" src="<?= $value['images'] ?>" alt="<?= $value['nom_article'] ?>"></td>
                             <td><a href="?id=<?= $value['id'] ?>"><i class='bx bx-edit-alt'></i></a></td>
                         </tr>
                 <?php

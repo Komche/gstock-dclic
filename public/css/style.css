@@ -188,7 +188,7 @@ nav .profile-details i {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: calc(100% / 4 - 15px);
+  /* min-width: calc(100% / 4 - 15px); */
   background: #fff;
   padding: 15px 14px;
   border-radius: 12px;
