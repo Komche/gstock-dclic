@@ -16,15 +16,15 @@ if (!empty($_GET['id'])) {
 
                 <label for="id_categorie">Catégorie</label>
                 <select name="id_categorie" id="id_categorie">
-                <option value="">--Choisir une catégorie--</option>
+                    <option value="">--Choisir une catégorie--</option>
                     <?php
 
                     $categories = getCategorie();
                     if (is_array($categories) && !empty($categories)) {
                         foreach ($categories as $key => $value) {
-                            ?>
+                    ?>
                             <option <?= !empty($_GET['id']) && $article['id_categorie'] == $value['id'] ?  "selected" : "" ?> value="<?= $value['id'] ?>"><?= $value['libelle_categorie'] ?></option>
-                            <?php
+                    <?php
                         }
                     }
                     ?>
@@ -41,7 +41,7 @@ if (!empty($_GET['id'])) {
 
                 <label for="date_expiration">Date d'expiration</label>
                 <input value="<?= !empty($_GET['id']) ?  $article['date_expiration'] : "" ?>" type="datetime-local" name="date_expiration" id="date_expiration">
-                
+
                 <label for="images">Image</label>
                 <input value="<?= !empty($_GET['id']) ?  $article['images'] : "" ?>" type="file" name="images" id="images">
 
@@ -59,7 +59,55 @@ if (!empty($_GET['id'])) {
             </form>
 
         </div>
-        <div class="box">
+        <div style="display: block;" class="box">
+            <form action="" method="get">
+                <table class="mtable">
+                    <tr>
+                        <th>Nom article</th>
+                        <th>Catégorie</th>
+                        <th>Quantité</th>
+                        <th>Prix unitaire</th>
+                        <th>Date fabrication</th>
+                        <th>Date expiration</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" name="nom_article" id="nom_article" placeholder="Veuillez saisir le nom">
+                        </td>
+                        <td>
+                            <select name="id_categorie" id="id_categorie">
+                                <option value="">--Choisir une catégorie--</option>
+                                <?php
+
+                                $categories = getCategorie();
+                                if (is_array($categories) && !empty($categories)) {
+                                    foreach ($categories as $key => $value) {
+                                ?>
+                                        <option <?= !empty($_GET['id']) && $article['id_categorie'] == $value['id'] ?  "selected" : "" ?> value="<?= $value['id'] ?>"><?= $value['libelle_categorie'] ?></option>
+                                <?php
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" name="quantite" id="quantite" placeholder="Veuillez saisir la quantité">
+                        </td>
+                        <td>
+                            <input type="number" name="prix_unitaire" id="prix_unitaire" placeholder="Veuillez saisir le prix">
+                        </td>
+                        <td>
+                            <input type="date" name="date_fabrication" id="date_fabrication">
+                        </td>
+                        <td>
+                            <input type="date" name="date_expiration" id="date_expiration">
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <button type="submit">Valider</button>
+            </form>
+            <br>
             <table class="mtable">
                 <tr>
                     <th>Nom article</th>
@@ -72,7 +120,13 @@ if (!empty($_GET['id'])) {
                     <th>Action</th>
                 </tr>
                 <?php
-                $articles = getArticle();
+                if (!empty($_GET)) {
+                    $articles = getArticle(null, $_GET);
+                } else {
+                    $articles = getArticle();
+                }
+                
+                
 
                 if (!empty($articles) && is_array($articles)) {
                     foreach ($articles as $key => $value) {

@@ -3,19 +3,13 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : sam. 24 sep. 2022 à 15:13
+-- Généré le : jeu. 11 mai 2023 à 21:25
 -- Version du serveur :  10.4.17-MariaDB
 -- Version de PHP : 7.4.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Base de données : `gestion_stock_dclic`
@@ -30,24 +24,47 @@ SET time_zone = "+00:00";
 CREATE TABLE `article` (
   `id` int(11) NOT NULL,
   `nom_article` varchar(50) NOT NULL,
-  `categorie` varchar(50) NOT NULL,
+  `id_categorie` int(11) NOT NULL,
   `quantite` int(11) NOT NULL,
   `prix_unitaire` int(11) NOT NULL,
   `date_fabrication` datetime NOT NULL,
-  `date_expiration` datetime NOT NULL
+  `date_expiration` datetime NOT NULL,
+  `images` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `article`
 --
 
-INSERT INTO `article` (`id`, `nom_article`, `categorie`, `quantite`, `prix_unitaire`, `date_fabrication`, `date_expiration`) VALUES
-(1, 'HP', 'Ordinateur', 3, 200000, '2022-09-15 22:32:00', '2022-09-18 19:36:00'),
-(2, 'Imprimante scanner', 'Imprimante', 1, 50000, '2022-09-09 20:41:00', '2022-10-02 19:47:00'),
-(3, 'Cable VGA', 'Accessoire', 65, 1500, '2022-09-18 18:55:00', '2022-09-16 18:57:00'),
-(4, 'souris', 'Accessoire', 105, 6000, '2022-09-16 19:58:00', '2022-09-16 19:02:00'),
-(5, 'Ecouteur', 'Accessoire', 3, 1000, '2022-09-23 00:26:00', '2022-09-23 20:33:00'),
-(6, 'Chargeur', 'Accessoire', 35, 500, '2022-09-23 22:27:00', '2022-09-23 01:27:00');
+INSERT INTO `article` (`id`, `nom_article`, `id_categorie`, `quantite`, `prix_unitaire`, `date_fabrication`, `date_expiration`, `images`) VALUES
+(1, 'HP', 1, 3, 200000, '2022-09-15 22:32:00', '2022-09-18 19:36:00', NULL),
+(2, 'Imprimante scanner', 2, 1, 50000, '2022-09-09 20:41:00', '2022-10-02 19:47:00', NULL),
+(3, 'Cable VGA', 3, 65, 1500, '2022-09-18 18:55:00', '2022-09-16 18:57:00', NULL),
+(4, 'souris', 3, 105, 6000, '2022-09-16 19:58:00', '2022-09-16 19:02:00', NULL),
+(5, 'Ecouteur', 3, 3, 1000, '2022-09-23 00:26:00', '2022-09-23 20:33:00', NULL),
+(6, 'Chargeur', 3, 35, 500, '2022-09-23 22:27:00', '2022-09-23 01:27:00', NULL),
+(7, 'HP 15', 1, 7, 7888, '2023-03-04 18:13:00', '2023-03-04 18:13:00', NULL),
+(8, 'Télécommande', 3, 10, 1000, '2023-03-03 18:35:00', '2023-04-09 18:35:00', '../public/images/WhatsApp Image 2023-01-23 at 12.57.19.jpeg');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `categorie_article`
+--
+
+CREATE TABLE `categorie_article` (
+  `id` int(11) NOT NULL,
+  `libelle_categorie` varchar(60) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `categorie_article`
+--
+
+INSERT INTO `categorie_article` (`id`, `libelle_categorie`) VALUES
+(1, 'Ordinateur'),
+(2, 'Imprimante'),
+(3, 'Accessoire');
 
 -- --------------------------------------------------------
 
@@ -166,6 +183,13 @@ INSERT INTO `vente` (`id`, `id_article`, `id_client`, `quantite`, `prix`, `date_
 -- Index pour la table `article`
 --
 ALTER TABLE `article`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_categorie` (`id_categorie`);
+
+--
+-- Index pour la table `categorie_article`
+--
+ALTER TABLE `categorie_article`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -204,7 +228,13 @@ ALTER TABLE `vente`
 -- AUTO_INCREMENT pour la table `article`
 --
 ALTER TABLE `article`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT pour la table `categorie_article`
+--
+ALTER TABLE `categorie_article`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `client`
@@ -248,7 +278,3 @@ ALTER TABLE `vente`
   ADD CONSTRAINT `vente_ibfk_1` FOREIGN KEY (`id_article`) REFERENCES `article` (`id`),
   ADD CONSTRAINT `vente_ibfk_2` FOREIGN KEY (`id_client`) REFERENCES `client` (`id`);
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
