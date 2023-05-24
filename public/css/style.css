@@ -592,3 +592,29 @@ ol.mtable li:nth-child(even) {
   }
 }
 /* source http://jsfiddle.net/mturjak/2wk6Q/1949/ */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination a {
+  display: inline-block;
+  padding: 8px 12px;
+  margin-right: 5px;
+  background-color: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.pagination a:hover {
+  background-color: #ddd;
+}
+
+.pagination .active {
+  background-color: #333;
+  color: #fff;
+}

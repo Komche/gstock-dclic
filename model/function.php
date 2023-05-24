@@ -1,8 +1,12 @@
 <?php
 include 'connexion.php';
 
-function getArticle($id = null, $searchDATA = array())
+function getArticle($id = null, $searchDATA = array(), $limit = null, $offset = null)
 {
+    $pagination = "";
+    if (!empty($limit) && (!empty($offset) || $offset == 0)) {
+        $pagination = " LIMIT $limit OFFSET $offset";
+    }
     if (!empty($id)) {
         $sql = "SELECT a.id AS id, id_categorie, nom_article, libelle_categorie, quantite, prix_unitaire, date_fabrication, 
         date_expiration, images
@@ -16,16 +20,16 @@ function getArticle($id = null, $searchDATA = array())
     } elseif (!empty($searchDATA)) {
         $search = "";
         extract($searchDATA);
-        if(!empty($nom_article)) $search .= " AND a.nom_article LIKE '%$nom_article%' ";
-        if(!empty($id_categorie)) $search .= " AND a.id_categorie = $id_categorie ";
-        if(!empty($quantite)) $search .= " AND a.quantite = $quantite ";
-        if(!empty($prix_unitaire)) $search .= " AND a.prix_unitaire = $prix_unitaire ";
-        if(!empty($date_fabrication)) $search .= " AND DATE(a.date_fabrication) = '$date_fabrication' ";
-        if(!empty($date_expiration)) $search .= " AND DATE(a.date_expiration) = '$date_expiration' ";
+        if (!empty($nom_article)) $search .= " AND a.nom_article LIKE '%$nom_article%' ";
+        if (!empty($id_categorie)) $search .= " AND a.id_categorie = $id_categorie ";
+        if (!empty($quantite)) $search .= " AND a.quantite = $quantite ";
+        if (!empty($prix_unitaire)) $search .= " AND a.prix_unitaire = $prix_unitaire ";
+        if (!empty($date_fabrication)) $search .= " AND DATE(a.date_fabrication) = '$date_fabrication' ";
+        if (!empty($date_expiration)) $search .= " AND DATE(a.date_expiration) = '$date_expiration' ";
 
         $sql = "SELECT a.id AS id, id_categorie, nom_article, libelle_categorie, quantite, prix_unitaire, date_fabrication, 
         date_expiration, images
-        FROM article AS a, categorie_article AS c WHERE c.id=a.id_categorie $search";
+        FROM article AS a, categorie_article AS c WHERE c.id=a.id_categorie $search $pagination";
 
         $req = $GLOBALS['connexion']->prepare($sql);
 
@@ -35,13 +39,42 @@ function getArticle($id = null, $searchDATA = array())
     } else {
         $sql = "SELECT a.id AS id, id_categorie, nom_article, libelle_categorie, quantite, prix_unitaire, date_fabrication, 
         date_expiration, images
-        FROM article AS a, categorie_article AS c WHERE c.id=a.id_categorie";
+        FROM article AS a, categorie_article AS c WHERE c.id=a.id_categorie $pagination";
+
+        $req = $GLOBALS['connexion']->prepare($sql);
+
+        $req->execute();
+        return $req->fetchAll();
+    }
+}
+
+function countArticle($searchDATA = array())
+{
+
+   if (!empty($searchDATA)) {
+        $search = "";
+        extract($searchDATA);
+        if (!empty($nom_article)) $search .= " AND a.nom_article LIKE '%$nom_article%' ";
+        if (!empty($id_categorie)) $search .= " AND a.id_categorie = $id_categorie ";
+        if (!empty($quantite)) $search .= " AND a.quantite = $quantite ";
+        if (!empty($prix_unitaire)) $search .= " AND a.prix_unitaire = $prix_unitaire ";
+        if (!empty($date_fabrication)) $search .= " AND DATE(a.date_fabrication) = '$date_fabrication' ";
+        if (!empty($date_expiration)) $search .= " AND DATE(a.date_expiration) = '$date_expiration' ";
+
+        $sql = "SELECT COUNT(*) AS total FROM article AS a, categorie_article AS c WHERE c.id=a.id_categorie $search";
 
         $req = $GLOBALS['connexion']->prepare($sql);
 
         $req->execute();
 
-        return $req->fetchAll();
+        return $req->fetch();
+    } else {
+        $sql = "SELECT COUNT(*) AS total 
+        FROM article AS a, categorie_article AS c WHERE c.id=a.id_categorie";
+        $req = $GLOBALS['connexion']->prepare($sql);
+
+        $req->execute();
+        return $req->fetch();
     }
 }
 
